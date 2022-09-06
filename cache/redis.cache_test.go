@@ -32,10 +32,8 @@ func TestRedisCache(t *testing.T) {
 	assert.Equal(t, user1.Age, foundUser1.Age)
 
 	time.Sleep(6 * time.Second)
-	foundUser1 = new(User)
 	err = redisCache.Get(context.TODO(), "test_key1", foundUser1)
-	assert.Nil(t, err)
-	assert.Empty(t, foundUser1.Name)
+	assert.Same(t, err, ErrNotExist)
 
 	user2 := &User{
 		Name: "rose",
@@ -52,8 +50,6 @@ func TestRedisCache(t *testing.T) {
 	err = redisCache.Delete(context.TODO(), "test_key2")
 	assert.Nil(t, err)
 
-	foundUser2 = new(User)
 	err = redisCache.Get(context.TODO(), "test_key2", foundUser2)
-	assert.Nil(t, err)
-	assert.Empty(t, foundUser2.Name)
+	assert.Same(t, err, ErrNotExist)
 }
