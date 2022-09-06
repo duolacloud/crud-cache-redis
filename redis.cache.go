@@ -9,7 +9,7 @@ import (
 	"github.com/gomodule/redigo/redis"
 )
 
-type redisCache struct {
+type RedisCache struct {
 	host        string
 	prefix      string
 	marshal     MarshalFunc
@@ -25,40 +25,40 @@ type redisCache struct {
 type MarshalFunc func(any) ([]byte, error)
 type UnmarshalFunc func([]byte, any) error
 
-type Option func(*redisCache)
+type Option func(*RedisCache)
 
 func WithHost(host string) Option {
-	return func(rc *redisCache) {
+	return func(rc *RedisCache) {
 		rc.host = host
 	}
 }
 
 func WithPrefix(prefix string) Option {
-	return func(rc *redisCache) {
+	return func(rc *RedisCache) {
 		rc.prefix = prefix
 	}
 }
 
 func WithMarshal(marshal MarshalFunc) Option {
-	return func(rc *redisCache) {
+	return func(rc *RedisCache) {
 		rc.marshal = marshal
 	}
 }
 
 func WithUnmarshal(unmarshal UnmarshalFunc) Option {
-	return func(rc *redisCache) {
+	return func(rc *RedisCache) {
 		rc.unmarshal = unmarshal
 	}
 }
 
 func WithPassword(password string) Option {
-	return func(rc *redisCache) {
+	return func(rc *RedisCache) {
 		rc.password = password
 	}
 }
 
 func WithPool(maxIdle, maxActive int, idleTimeout time.Duration) Option {
-	return func(rc *redisCache) {
+	return func(rc *RedisCache) {
 		rc.maxIdle = maxIdle
 		rc.maxActive = maxActive
 		rc.idleTimeout = idleTimeout
@@ -66,13 +66,13 @@ func WithPool(maxIdle, maxActive int, idleTimeout time.Duration) Option {
 }
 
 func WithDB(db int) Option {
-	return func(rc *redisCache) {
+	return func(rc *RedisCache) {
 		rc.db = db
 	}
 }
 
 func NewRedisCache(opts ...Option) (cache.Cache, error) {
-	c := &redisCache{
+	c := &RedisCache{
 		host:        "localhost:6379",
 		marshal:     json.Marshal,
 		unmarshal:   json.Unmarshal,
@@ -87,7 +87,7 @@ func NewRedisCache(opts ...Option) (cache.Cache, error) {
 	return c, nil
 }
 
-func (rc *redisCache) connect() {
+func (rc *RedisCache) connect() {
 	rc.redisPool = &redis.Pool{
 		MaxIdle:     rc.maxIdle,
 		MaxActive:   rc.maxActive,
@@ -120,7 +120,7 @@ func (rc *redisCache) connect() {
 		}}
 }
 
-func (rc *redisCache) Get(c context.Context, key string, value any, opts ...cache.GetOption) error {
+func (rc *RedisCache) Get(c context.Context, key string, value any, opts ...cache.GetOption) error {
 	options := &cache.GetOptions{}
 	for _, opt := range opts {
 		opt(options)
@@ -140,7 +140,7 @@ func (rc *redisCache) Get(c context.Context, key string, value any, opts ...cach
 	return rc.unmarshal(bytes, value)
 }
 
-func (rc *redisCache) Set(c context.Context, key string, value any, opts ...cache.SetOption) error {
+func (rc *RedisCache) Set(c context.Context, key string, value any, opts ...cache.SetOption) error {
 	options := &cache.SetOptions{}
 	for _, opt := range opts {
 		opt(options)
@@ -159,7 +159,7 @@ func (rc *redisCache) Set(c context.Context, key string, value any, opts ...cach
 	return err
 }
 
-func (rc *redisCache) Delete(c context.Context, key string, opts ...cache.DeleteOption) error {
+func (rc *RedisCache) Delete(c context.Context, key string, opts ...cache.DeleteOption) error {
 	options := &cache.DeleteOptions{}
 	for _, opt := range opts {
 		opt(options)
