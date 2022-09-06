@@ -1,4 +1,4 @@
-module github.com/duolacloud/crud/crud-cache-redis
+module github.com/duolacloud/crud-cache-redis
 
 go 1.18
 
