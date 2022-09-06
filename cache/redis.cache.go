@@ -148,12 +148,10 @@ func (rc *redisCache) Set(c context.Context, key string, value any, opts ...cach
 	for _, opt := range opts {
 		opt(options)
 	}
-
 	bytes, err := rc.marshal(value)
 	if err != nil {
 		return err
 	}
-
 	cacheKey := rc.prefix + key
 	expiresIn := options.Exipration.Seconds()
 	if expiresIn > 0 {
