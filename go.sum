@@ -1,7 +1,7 @@
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/duolacloud/crud-core v0.0.0-20220906125503-8ee534224c1a h1:cavO4r5Gt4MDSXqmom6/YYZ2NHkilhC7TMkV0rFegok=
-github.com/duolacloud/crud-core v0.0.0-20220906125503-8ee534224c1a/go.mod h1:3IsEPFornWY3hgBthTl8pcpTK4txvn0ctgZdcbPR8Y0=
+github.com/duolacloud/crud-core v0.0.0-20220906153904-2e02878dbf69 h1:cALckRit5R6sX8X70TZIBtwbzxAv2FM9txxs8HAI/Wk=
+github.com/duolacloud/crud-core v0.0.0-20220906153904-2e02878dbf69/go.mod h1:ccLZ2Lt/psGqBxN0stZ6vpdwshq7tEUE0Z+8cpM5oBc=
 github.com/gomodule/redigo v1.8.9 h1:Sl3u+2BI/kk+VEatbj0scLdrFhjPmbxOc1myhDP41ws=
 github.com/gomodule/redigo v1.8.9/go.mod h1:7ArFNvsTjH8GMMzB4uy1snslv2BwmginuMs06a1uzZE=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

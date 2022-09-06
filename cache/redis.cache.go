@@ -3,14 +3,11 @@ package cache
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"time"
 
 	"github.com/duolacloud/crud-core/cache"
 	"github.com/gomodule/redigo/redis"
 )
-
-var ErrNotExist = errors.New("key does not exist")
 
 type redisCache struct {
 	host        string
@@ -132,7 +129,7 @@ func (rc *redisCache) Get(c context.Context, key string, value any, opts ...cach
 	bytes, err := redis.Bytes(rc.redisPool.Get().Do("GET", cacheKey))
 	if err != nil {
 		if redis.ErrNil == err {
-			return ErrNotExist
+			return cache.ErrNotExsit
 		} else {
 			return err
 		}
