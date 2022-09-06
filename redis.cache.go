@@ -3,6 +3,7 @@ package cache
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"time"
 
 	"github.com/duolacloud/crud-core/cache"
@@ -128,7 +129,7 @@ func (rc *RedisCache) Get(c context.Context, key string, value any, opts ...cach
 	cacheKey := rc.prefix + key
 	bytes, err := redis.Bytes(rc.redisPool.Get().Do("GET", cacheKey))
 	if err != nil {
-		if redis.ErrNil == err {
+		if errors.Is(err, redis.ErrNil) {
 			return cache.ErrNotExsit
 		} else {
 			return err
