@@ -10,17 +10,18 @@ import (
 	"github.com/gomodule/redigo/redis"
 )
 
+// 基于 redis 的缓存
 type RedisCache struct {
-	host        string
-	prefix      string
-	marshal     MarshalFunc
-	unmarshal   UnmarshalFunc
-	password    string
-	maxIdle     int
-	maxActive   int
-	idleTimeout time.Duration
-	db          int
-	redisPool   *redis.Pool
+	prefix      string        // 缓存键的前缀
+	marshal     MarshalFunc   // 将 struct 序列化为字节数组
+	unmarshal   UnmarshalFunc // 将字节数组反序列化为 struct
+	host        string        // redis连接
+	password    string        // redis 认证密码
+	maxIdle     int           // redis 连接池最大空闲连接
+	maxActive   int           // redis 连接池最大连接数
+	idleTimeout time.Duration // redis 连接池空闲超时时间，超时后连接被回收
+	db          int           // redis 选择的 db
+	redisPool   *redis.Pool   // redis 连接池实例
 }
 
 type MarshalFunc func(any) ([]byte, error)
@@ -28,47 +29,61 @@ type UnmarshalFunc func([]byte, any) error
 
 type Option func(*RedisCache)
 
-func WithHost(host string) Option {
-	return func(rc *RedisCache) {
-		rc.host = host
-	}
-}
-
+// 设置缓存键的前缀
 func WithPrefix(prefix string) Option {
 	return func(rc *RedisCache) {
 		rc.prefix = prefix
 	}
 }
 
+// 设置序列化函数
 func WithMarshal(marshal MarshalFunc) Option {
 	return func(rc *RedisCache) {
 		rc.marshal = marshal
 	}
 }
 
+// 设置反序列化函数
 func WithUnmarshal(unmarshal UnmarshalFunc) Option {
 	return func(rc *RedisCache) {
 		rc.unmarshal = unmarshal
 	}
 }
 
+// 设置 redis 连接地址
+func WithHost(host string) Option {
+	return func(rc *RedisCache) {
+		rc.host = host
+	}
+}
+
+// 设置 redis 认证密码
 func WithPassword(password string) Option {
 	return func(rc *RedisCache) {
 		rc.password = password
 	}
 }
 
-func WithPool(maxIdle, maxActive int, idleTimeout time.Duration) Option {
+// 设置 redis 选择的 db
+func WithDB(db int) Option {
+	return func(rc *RedisCache) {
+		rc.db = db
+	}
+}
+
+// 设置连接池，缓存将使用此连接池，而不是自己创建
+func WithPool(redisPool *redis.Pool) Option {
+	return func(rc *RedisCache) {
+		rc.redisPool = redisPool
+	}
+}
+
+// 设置连接池配置
+func WithPoolOptions(maxIdle, maxActive int, idleTimeout time.Duration) Option {
 	return func(rc *RedisCache) {
 		rc.maxIdle = maxIdle
 		rc.maxActive = maxActive
 		rc.idleTimeout = idleTimeout
-	}
-}
-
-func WithDB(db int) Option {
-	return func(rc *RedisCache) {
-		rc.db = db
 	}
 }
 
@@ -84,11 +99,13 @@ func NewRedisCache(opts ...Option) (cache.Cache, error) {
 	for _, opt := range opts {
 		opt(c)
 	}
-	c.connect()
+	if c.redisPool == nil {
+		c.newPool()
+	}
 	return c, nil
 }
 
-func (rc *RedisCache) connect() {
+func (rc *RedisCache) newPool() {
 	rc.redisPool = &redis.Pool{
 		MaxIdle:     rc.maxIdle,
 		MaxActive:   rc.maxActive,
