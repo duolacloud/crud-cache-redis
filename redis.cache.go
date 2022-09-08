@@ -143,8 +143,12 @@ func (rc *RedisCache) Get(c context.Context, key string, value any, opts ...cach
 	for _, opt := range opts {
 		opt(options)
 	}
+
+	conn := rc.redisPool.Get()
+	defer conn.Close()
+
 	cacheKey := rc.prefix + key
-	bytes, err := redis.Bytes(rc.redisPool.Get().Do("GET", cacheKey))
+	bytes, err := redis.Bytes(conn.Do("GET", cacheKey))
 	if err != nil {
 		if errors.Is(err, redis.ErrNil) {
 			return cache.ErrNotExsit
@@ -167,12 +171,16 @@ func (rc *RedisCache) Set(c context.Context, key string, value any, opts ...cach
 	if err != nil {
 		return err
 	}
+
+	conn := rc.redisPool.Get()
+	defer conn.Close()
+
 	cacheKey := rc.prefix + key
 	expiresIn := options.Exipration.Seconds()
 	if expiresIn > 0 {
-		_, err = rc.redisPool.Get().Do("SETEX", cacheKey, expiresIn, bytes)
+		_, err = conn.Do("SETEX", cacheKey, expiresIn, bytes)
 	} else {
-		_, err = rc.redisPool.Get().Do("SET", cacheKey, bytes)
+		_, err = conn.Do("SET", cacheKey, bytes)
 	}
 	return err
 }
@@ -182,7 +190,11 @@ func (rc *RedisCache) Delete(c context.Context, key string, opts ...cache.Delete
 	for _, opt := range opts {
 		opt(options)
 	}
+
+	conn := rc.redisPool.Get()
+	defer conn.Close()
+
 	cacheKey := rc.prefix + key
-	_, err := rc.redisPool.Get().Do("DEL", cacheKey)
+	_, err := conn.Do("DEL", cacheKey)
 	return err
 }
