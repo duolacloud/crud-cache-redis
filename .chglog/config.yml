@@ -5,16 +5,18 @@ info:
   repository_url: https://github.com/duolacloud/crud-cache-redis
 options:
   commits:
-    - feat
-    - fix
-    - perf
-    - refactor
-    - chore
-    # - build
-    # - ci
-    # - docs
-    # - style
-    # - test
+    filters:
+      Type:
+        - feat
+        - fix
+        - perf
+        - refactor
+        - chore
+        # - build
+        # - ci
+        # - docs
+        # - style
+        # - test
   commit_groups:
     # title_maps:
     #   feat: Features
