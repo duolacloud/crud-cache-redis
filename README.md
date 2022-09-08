@@ -18,26 +18,26 @@ import "github.com/duolacloud/crud-cache-redis"
 
 // 创建缓存
 c, err := cache.NewRedisCache(
-	// 设置缓存键前缀
-	WithPrefix("APP_CACHE_PREFIX:"),
+  // 设置缓存键前缀
+  WithPrefix("APP_CACHE_PREFIX:"),
 
-	// 设置序列化和反序列化，默认是 json.Marshal / json.Unmarshal
-	WithMarshal(xml.Marshal),
-	WithUnmarshal(xml.Unmarshal),
+  // 设置序列化和反序列化，默认是 json.Marshal / json.Unmarshal
+  WithMarshal(xml.Marshal),
+  WithUnmarshal(xml.Unmarshal),
 
-	// redis 连接配置
-	// 设置 redis 连接地址
-	WithHost("127.0.0.1:6379"),
-	// 设置 redis AUTH 认证
-	WithPassword("secret"),
-	// 设置 redis SELECT 选择 db
-	WithDB(1),
-	// 设置 redis 连接池
-	WithPoolOptions(5, 20, 30 * time.Minitue),
+  // redis 连接配置
+  // 设置 redis 连接地址
+  WithHost("127.0.0.1:6379"),
+  // 设置 redis AUTH 认证
+  WithPassword("secret"),
+  // 设置 redis SELECT 选择 db
+  WithDB(1),
+  // 设置 redis 连接池
+  WithPoolOptions(5, 20, 30 * time.Minitue),
 
-	// 设置 redis 连接池
-	// 设置后会忽略上面提供的 redis 连接配置，直接使用用户提供的连接池
-	WithPool(redisPool),
+  // 设置 redis 连接池
+  // 设置后会忽略上面提供的 redis 连接配置，直接使用用户提供的连接池
+  WithPool(redisPool),
 )
 
 // 设置缓存
