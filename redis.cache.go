@@ -145,7 +145,7 @@ func (rc *RedisCache) Get(c context.Context, key string, value any, opts ...cach
 	}
 
 	conn := rc.redisPool.Get()
-	defer conn.Close()
+	defer func() { _ = conn.Close() }()
 
 	cacheKey := rc.prefix + key
 	bytes, err := redis.Bytes(conn.Do("GET", cacheKey))
@@ -173,7 +173,7 @@ func (rc *RedisCache) Set(c context.Context, key string, value any, opts ...cach
 	}
 
 	conn := rc.redisPool.Get()
-	defer conn.Close()
+	defer func() { _ = conn.Close() }()
 
 	cacheKey := rc.prefix + key
 	expiresIn := options.Exipration.Seconds()
@@ -192,7 +192,7 @@ func (rc *RedisCache) Delete(c context.Context, key string, opts ...cache.Delete
 	}
 
 	conn := rc.redisPool.Get()
-	defer conn.Close()
+	defer func() { _ = conn.Close() }()
 
 	cacheKey := rc.prefix + key
 	_, err := conn.Do("DEL", cacheKey)
