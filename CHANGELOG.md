@@ -2,6 +2,12 @@
 ## [Unreleased]
 
 
+<a name="v0.0.5"></a>
+## [v0.0.5] - 2022-09-21
+### Fix
+- 适配 redis 错误为 crud-core 错误
+
+
 <a name="v0.0.4"></a>
 ## [v0.0.4] - 2022-09-08
 ### Fix
@@ -23,7 +29,8 @@
 <a name="v0.0.1"></a>
 ## v0.0.1 - 2022-09-07
 
-[Unreleased]: https://github.com/duolacloud/crud-cache-redis/compare/v0.0.4...HEAD
+[Unreleased]: https://github.com/duolacloud/crud-cache-redis/compare/v0.0.5...HEAD
+[v0.0.5]: https://github.com/duolacloud/crud-cache-redis/compare/v0.0.4...v0.0.5
 [v0.0.4]: https://github.com/duolacloud/crud-cache-redis/compare/v0.0.3...v0.0.4
 [v0.0.3]: https://github.com/duolacloud/crud-cache-redis/compare/v0.0.2...v0.0.3
 [v0.0.2]: https://github.com/duolacloud/crud-cache-redis/compare/v0.0.1...v0.0.2
