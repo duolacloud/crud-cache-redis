@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/duolacloud/crud-core/cache"
+	"github.com/duolacloud/crud-core/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -33,7 +34,7 @@ func TestRedisCache(t *testing.T) {
 
 	time.Sleep(6 * time.Second)
 	err = redisCache.Get(context.TODO(), "test_key1", foundUser1)
-	assert.Same(t, err, cache.ErrNotExsit)
+	assert.Same(t, err, types.ErrNotFound)
 
 	user2 := &User{
 		Name: "rose",
@@ -51,5 +52,5 @@ func TestRedisCache(t *testing.T) {
 	assert.Nil(t, err)
 
 	err = redisCache.Get(context.TODO(), "test_key2", foundUser2)
-	assert.Same(t, err, cache.ErrNotExsit)
+	assert.Same(t, err, types.ErrNotFound)
 }

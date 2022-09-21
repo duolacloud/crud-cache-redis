@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/duolacloud/crud-core/cache"
+	"github.com/duolacloud/crud-core/types"
 	"github.com/gomodule/redigo/redis"
 )
 
@@ -150,11 +151,7 @@ func (rc *RedisCache) Get(c context.Context, key string, value any, opts ...cach
 	cacheKey := rc.prefix + key
 	bytes, err := redis.Bytes(conn.Do("GET", cacheKey))
 	if err != nil {
-		if errors.Is(err, redis.ErrNil) {
-			return cache.ErrNotExsit
-		} else {
-			return err
-		}
+		return wrapRedisError(err)
 	}
 	if bytes == nil {
 		return nil
@@ -196,5 +193,14 @@ func (rc *RedisCache) Delete(c context.Context, key string, opts ...cache.Delete
 
 	cacheKey := rc.prefix + key
 	_, err := conn.Do("DEL", cacheKey)
+	return err
+}
+
+func wrapRedisError(err error) error {
+	if err != nil {
+		if errors.Is(err, redis.ErrNil) {
+			return types.ErrNotFound
+		}
+	}
 	return err
 }
