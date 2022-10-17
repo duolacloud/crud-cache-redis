@@ -175,7 +175,7 @@ func (rc *RedisCache) Set(c context.Context, key string, value any, opts ...cach
 	cacheKey := rc.prefix + key
 	expiresIn := options.Exipration.Seconds()
 	if expiresIn > 0 {
-		_, err = conn.Do("SETEX", cacheKey, expiresIn, bytes)
+		_, err = conn.Do("SETEX", cacheKey, int64(expiresIn), bytes)
 	} else {
 		_, err = conn.Do("SET", cacheKey, bytes)
 	}
