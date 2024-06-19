@@ -16,7 +16,7 @@ type User struct {
 }
 
 func TestRedisCache(t *testing.T) {
-	redisCache, err := NewRedisCache(WithPrefix("curd-cache-redis:"))
+	redisCache, err := New(WithPrefix("curd-cache-redis:"))
 	assert.Nil(t, err)
 
 	user1 := &User{
