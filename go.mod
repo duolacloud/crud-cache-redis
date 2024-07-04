@@ -3,7 +3,7 @@ module github.com/duolacloud/crud-cache-redis
 go 1.18
 
 require (
-	github.com/duolacloud/crud-core v0.0.4
+	github.com/duolacloud/crud-core v0.0.6-0.20240704101947-b3f131dd22b5
 	github.com/gomodule/redigo v1.8.9
 	github.com/stretchr/testify v1.7.0
 )

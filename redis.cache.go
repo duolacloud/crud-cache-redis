@@ -183,6 +183,16 @@ func (rc *RedisCache) Delete(ctx context.Context, key string, opts ...cache.Dele
 	return err
 }
 
+func (rc *RedisCache) Exists(ctx context.Context, key string) (bool, error) {
+	cacheKey := rc.prefix + key
+	exists, err := rc.client.Exists(ctx, cacheKey).Result()
+	if err != nil {
+		return false, err
+	}
+
+	return exists == 1, nil
+}
+
 func wrapRedisError(err error) error {
 	if err != nil {
 		if errors.Is(err, redis.Nil) {

@@ -48,9 +48,18 @@ func TestRedisCache(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, foundUser2.Name, user2.Name)
 
+	exists, err := redisCache.Exists(context.TODO(), "test_key2")
+	assert.Nil(t, err)
+	assert.True(t, exists)
+
 	err = redisCache.Delete(context.TODO(), "test_key2")
 	assert.Nil(t, err)
 
 	err = redisCache.Get(context.TODO(), "test_key2", foundUser2)
 	assert.Same(t, err, types.ErrNotFound)
+
+	exists, err = redisCache.Exists(context.TODO(), "test_key2")
+	assert.Nil(t, err)
+	assert.False(t, exists)
+
 }
